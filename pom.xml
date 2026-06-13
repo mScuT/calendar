@@ -72,7 +72,7 @@
             <scope>test</scope>
         </dependency>
 
-        <!-- Selenium para os testes End-to-End -->
+        <!-- Selenium for End-to-End tests -->
         <dependency>
             <groupId>org.seleniumhq.selenium</groupId>
             <artifactId>selenium-java</artifactId>

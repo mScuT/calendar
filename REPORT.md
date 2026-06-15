@@ -41,19 +41,31 @@ classes that have dependencies (added as those classes are tested).
 
 `ICalService` renders the VCALENDAR (`.ics`) feed and has no dependencies. `ICalServiceTest` covers:
 
-- `render_writesValidVCalendarHeaderAndFooter` — the document starts with `BEGIN:VCALENDAR`, ends
+- `render_writesValidVCalendarHeaderAndFooter`- the document starts with `BEGIN:VCALENDAR`, ends
   with `END:VCALENDAR`, and carries `VERSION:2.0`, `PRODID` and the owner's calendar name, all
   CRLF-terminated.
-- `render_marksMeetingConfirmedWhenEveryoneAccepted` — `STATUS:CONFIRMED` when every participant
+- `render_marksMeetingConfirmedWhenEveryoneAccepted`- `STATUS:CONFIRMED` when every participant
   accepted (also checks `DTSTART`/`DTEND`/`SUMMARY` formatting).
-- `render_marksMeetingTentativeWhenSomeoneStillPending` — `STATUS:TENTATIVE` when at least one
+- `render_marksMeetingTentativeWhenSomeoneStillPending`- `STATUS:TENTATIVE` when at least one
   invitee is still pending.
-- `render_mapsParticipantStatusToPartStat` — each attendee's invite status maps to the right value
+- `render_mapsParticipantStatusToPartStat`- each attendee's invite status maps to the right value
   (`ACCEPTED` / `DECLINED` / `PENDING` → `NEEDS-ACTION`).
-- `render_escapesSpecialCharactersPerRfc5545` — `\`, `;` and `,` are backslash-escaped, a newline
+- `render_escapesSpecialCharactersPerRfc5545`- `\`, `;` and `,` are backslash-escaped, a newline
   becomes the two characters `\n`, and a carriage return is dropped. The test title contains all of
   them; the carriage return is included on purpose so the `\r`-stripping branch of `escape()` is
   exercised (otherwise that line could be deleted and the test would still pass).
+
+### UserService
+
+`UserService` depends on `UserRepository` and `PasswordEncoder`, both replaced with Mockito mocks
+so the logic runs with no database and no real hashing. `UserServiceTest` covers:
+
+- `register_rejectsDuplicateUsernameAndDoesNotSave`- a taken username throws and `save()` is never
+  called (asserted with `verify(..., never())`).
+- `register_encodesPasswordBeforeSaving`- the raw password is passed through the encoder and the
+  persisted user carries the hash, not the raw text (captured with an `ArgumentCaptor`).
+- `requireByUsername_returnsUserWhenFound`- a known username resolves to its user.
+- `requireByUsername_throwsWhenUnknown`- an unknown username throws instead of returning `null`.
 
 ## 5. Remaining work (TODO)
 

@@ -32,7 +32,30 @@ Test dependencies added to `pom.xml` (all `scope=test`):
 
 **TODO**
 
-## 4. Remaining work (TODO)
+## 4. Unit tests of the business logic (Point 1)
+
+JUnit 5 + AssertJ tests, with no Spring context, database or network. Mockito is used for the
+classes that have dependencies (added as those classes are tested).
+
+### ICalService
+
+`ICalService` renders the VCALENDAR (`.ics`) feed and has no dependencies. `ICalServiceTest` covers:
+
+- `render_writesValidVCalendarHeaderAndFooter` — the document starts with `BEGIN:VCALENDAR`, ends
+  with `END:VCALENDAR`, and carries `VERSION:2.0`, `PRODID` and the owner's calendar name, all
+  CRLF-terminated.
+- `render_marksMeetingConfirmedWhenEveryoneAccepted` — `STATUS:CONFIRMED` when every participant
+  accepted (also checks `DTSTART`/`DTEND`/`SUMMARY` formatting).
+- `render_marksMeetingTentativeWhenSomeoneStillPending` — `STATUS:TENTATIVE` when at least one
+  invitee is still pending.
+- `render_mapsParticipantStatusToPartStat` — each attendee's invite status maps to the right value
+  (`ACCEPTED` / `DECLINED` / `PENDING` → `NEEDS-ACTION`).
+- `render_escapesSpecialCharactersPerRfc5545` — `\`, `;` and `,` are backslash-escaped, a newline
+  becomes the two characters `\n`, and a carriage return is dropped. The test title contains all of
+  them; the carriage return is included on purpose so the `\r`-stripping branch of `escape()` is
+  exercised (otherwise that line could be deleted and the test would still pass).
+
+## 5. Remaining work (TODO)
 
 - [ ]  Unit tests of the business logic, with mocks (Point 1)
 - [ ]  Integration tests with the 3rd party sources (Point 2)

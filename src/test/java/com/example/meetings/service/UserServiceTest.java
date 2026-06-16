@@ -40,7 +40,7 @@ class UserServiceTest {
     @InjectMocks
     private UserService userService;
 
-    /** A duplicate username must abort registration before anything is persisted. */
+    /** A duplicate username must stop registration before anything is saved. */
     @Test
     void register_rejectsDuplicateUsernameAndDoesNotSave() {
         when(userRepository.existsByUsername("alice")).thenReturn(true);

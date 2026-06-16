@@ -31,7 +31,7 @@ class ICalServiceTest {
         return new User(name, name + "@example.pt", "hash");
     }
 
-    /** An empty calendar must still produce a well-formed VCALENDAR envelope. */
+    /** An empty calendar must still produce a well-formed VCALENDAR document. */
     @Test
     void render_writesValidVCalendarHeaderAndFooter() {
         String ics = icalService.render(user("alice"), List.of());

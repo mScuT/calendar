@@ -93,9 +93,20 @@ All three repositories are mocked. `MeetingServiceTest` covers:
 
 - `calendarForIcalToken_throwsOnUnknownToken`- an unknown iCal token is rejected.
 
+### DiscoveryService
+
+`DiscoveryService` merges results from several `EventProvider`s, which are mocked here. `DiscoveryServiceTest` covers:
+
+- `search_returnsEmptyForNullQuery`- a null query returns an empty list without querying any provider.
+- `search_returnsEmptyForBlankQuery`- a blank query does the same.
+- `search_ignoresUnconfiguredProviders`- a provider that is not configured is never queried.
+- `search_dedupesByUrlAcrossProviders`- the same URL from two providers is kept only once.
+- `search_dedupesBySourceAndIdWhenUrlIsNull`- with a null URL, dedup falls back to source + externalId.
+- `search_sortsResultsByStartTime`- the merged list is sorted by start time.
+
 ## 5. Remaining work (TODO)
 
-- [ ]  Unit tests of the business logic, with mocks (Point 1)
+- [x]  Unit tests of the business logic, with mocks (Point 1)
 - [ ]  Integration tests with the 3rd party sources (Point 2)
 - [ ]  Integration tests at the REST API level (Point 3)
 - [ ]  Integration tests with the concrete database (Point 4)

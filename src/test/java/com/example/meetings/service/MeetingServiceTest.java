@@ -30,10 +30,10 @@ import static org.mockito.Mockito.when;
 /**
  * Unit tests for MeetingService - Assignment point 1 (business-logic unit tests).
  *
- * MeetingService is the core of the domain. Its three repositories are mocked so the scheduling
+ * MeetingService is the main service. Its three repositories are mocked so the scheduling
  * rules are tested in isolation. Covered behaviour:
  *  - propose(): rejects end <= start; organizer auto-accepts while invitees are PENDING;
- *    deduplicates invitees and skips the organizer and blank names; unknown invitee throws;
+ *    removes duplicate invitees and skips the organizer and blank names; unknown invitee throws;
  *  - respond(): only ACCEPTED/DECLINED allowed; throws when the user has no invite; updates status;
  *  - copyFromDiscovered(): defaults to a 2h duration when the event has no end; builds the description;
  *  - calendarForIcalToken(): throws on an unknown token.
@@ -117,7 +117,7 @@ class MeetingServiceTest {
         verify(userRepository, never()).findByUsername("alice");
     }
 
-    /** An invitee that does not exist aborts the whole proposal. */
+    /** An invitee that does not exist stops the whole proposal. */
     @Test
     void propose_throwsOnUnknownInvitee() {
         User alice = user("alice");
@@ -172,7 +172,7 @@ class MeetingServiceTest {
 
     // ----- copyFromDiscovered -----
 
-    /** An event without an end time defaults to a 2-hour duration; the user is the sole attendee. */
+    /** An event without an end time defaults to a 2-hour duration; the user is the only attendee. */
     @Test
     void copyFromDiscovered_defaultsToTwoHoursWhenNoEnd() {
         User alice = user("alice");
@@ -188,7 +188,7 @@ class MeetingServiceTest {
         assertThat(participantOf(m, "alice").getStatus()).isEqualTo(InviteStatus.ACCEPTED);
     }
 
-    /** The description embeds event description, venue, source and url; an explicit end is preserved. */
+    /** The description includes event description, venue, source and url; a given end time is kept. */
     @Test
     void copyFromDiscovered_buildsDescriptionAndKeepsEnd() {
         User alice = user("alice");

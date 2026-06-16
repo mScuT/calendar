@@ -175,6 +175,17 @@ These boot the whole app with `@SpringBootTest` and call it through `MockMvc`, g
 - `postRegister_duplicateUsername_returnsRegisterViewWithError`- a duplicate username returns the register view with an error.
 - `privateRoute_withoutLogin_redirectsToLogin`- a private route accessed without login is redirected to /login.
 
+### MeetingController and CalendarController
+
+`MeetingControllerTest` creates two users and acts as them with `@WithMockUser`. It covers:
+
+- `getCalendar_showsTheUsersMeetings`- the calendar shows the logged-in user's meetings.
+- `getCalendar_showsPendingInvites`- the calendar shows the user's pending invites.
+- `getMeetingsNew_returnsProposeView`- GET /meetings/new returns the propose form.
+- `postMeetingsNew_validInput_createsMeetingAndRedirects`- valid input creates the meeting and redirects to /calendar.
+- `postMeetingsNew_endBeforeStart_returnsProposeViewWithError`- end before start shows the form again with an error and saves nothing.
+- `postRespond_accept_marksInviteAccepted`- an invitee accepting their invite updates the participant status.
+
 ## 7. Remaining work (TODO)
 
 - [X]  Unit tests of the business logic, with mocks (Point 1)

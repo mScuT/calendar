@@ -200,7 +200,19 @@ These boot the whole app with `@SpringBootTest` and call it through `MockMvc`, g
 - `getIcalFeed_validToken_returnsCalendar`- a valid token returns a `text/calendar` VCALENDAR feed.
 - `getIcalFeed_unknownToken_returns404`- an unknown token returns 404.
 
-## 7. Remaining work (TODO)
+## 7. Integration tests with the concrete database (Point 4)
+
+These use `@DataJpaTest`, which loads only the JPA layer and runs against the test H2 database (`replace = NONE` + `@ActiveProfiles("test")`, so it is the same database as the other tests). Each test rolls back, and the `TestEntityManager` inserts the data.
+
+### UserRepository
+
+`UserRepositoryTest` covers:
+
+- `existsByUsername_isTrueOnlyForSavedUsernames`- existsByUsername is true only for a saved username.
+- `findByUsername_returnsUserOrEmpty`- findByUsername returns the matching user, or empty when unknown.
+- `findByIcalToken_returnsUserForTheirToken`- findByIcalToken looks a user up by their feed token.
+
+## 8. Remaining work (TODO)
 
 - [X]  Unit tests of the business logic, with mocks (Point 1)
 - [X]  Integration tests with the 3rd party sources (Point 2)

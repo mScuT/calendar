@@ -238,14 +238,25 @@ These use `@DataJpaTest`, which loads only the JPA layer and runs against the te
 
 `.github/workflows/ci.yml` runs the whole suite in the cloud on every push and pull request. The job runs on `ubuntu-latest`, sets up Java 17 (Temurin), and runs `mvn -B clean verify`.
 
-## 10. Remaining work (TODO)
+## 10. Code coverage
 
-- [X]  Unit tests of the business logic, with mocks (Point 1)
-- [X]  Integration tests with the 3rd party sources (Point 2)
-- [X]  Integration tests at the REST API level (Point 3)
-- [X]  Integration tests with the concrete database (Point 4)
-- [X]  End-to-end tests with Selenium (Point 5)
-- [X]  Continuous Integration (Point 6)
-- [ ]  Code changes report and explanation
-- [ ]  Bug detection write-up (Assessment, point c)
-- [ ]  Conclusion
+Coverage is measured with JaCoCo (`jacoco-maven-plugin`); the report is generated under `target/site/jacoco/` whenever the tests run. Over the production code:
+
+
+| Metric       | Coverage         |
+| ------------ | ---------------- |
+| Lines        | ~96% (434/452)   |
+| Instructions | ~95% (1987/2080) |
+| Branches     | ~78% (141/181)   |
+
+The business logic is well covered: the services, controllers, repositories and providers are all tested. The gaps are:
+
+- the `main` method of `MeetingsApplication`, which no test runs;
+- a few entity setters (`User.setEmail`, `User.setPasswordHash`, some `Meeting` setters) that no flow uses;
+- defensive branches in `AgendaLxProvider` (free-text time parsing and bad-date handling), which has the most uncovered code, plus a couple of `DiscoveryController` branches.
+
+## 11. Conclusion
+
+The Calendar application was tested at every level of the test pyramid: unit tests for the business logic (with Mockito), integration tests for the 3rd party providers (against a WireMock server), the REST API (MockMvc through Spring Security), and the database (`@DataJpaTest`), plus end-to-end tests with Selenium, and a CI pipeline that runs everything on each push. The result is 77 tests and about 96% line coverage of the code.
+
+Only one change to the SUT was needed: making the providers' base URL configurable. And it does not change production behaviour.

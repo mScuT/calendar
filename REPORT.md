@@ -219,12 +219,20 @@ These use `@DataJpaTest`, which loads only the JPA layer and runs against the te
 - `findCalendarMeetings_includesOrganizedAndNonDeclined_orderedByStart`- a user's calendar holds meetings they organize or join (not declined), ordered by start time.
 - `findCalendarMeetings_keepsDeclinedMeetingOnTheOrganizerCalendar`- a meeting a user declined still stays on the organizer's calendar.
 
+### MeetingParticipantRepository
+
+`MeetingParticipantRepositoryTest` covers:
+
+- `findByUserAndStatus_returnsOnlyTheMatchingStatus`- findByUserAndStatus returns only the invites with that status.
+- `findByMeetingIdAndUserId_returnsTheRightParticipant`- findByMeetingIdAndUserId returns the one participant for a meeting and user (empty for a combo that does not exist).
+- `savingMeetingCascadesItsParticipants`- saving a meeting also saves its participants (cascade).
+
 ## 8. Remaining work (TODO)
 
 - [X]  Unit tests of the business logic, with mocks (Point 1)
 - [X]  Integration tests with the 3rd party sources (Point 2)
 - [X]  Integration tests at the REST API level (Point 3)
-- [ ]  Integration tests with the concrete database (Point 4)
+- [X]  Integration tests with the concrete database (Point 4)
 - [ ]  End-to-end tests with Selenium (Point 5)
 - [ ]  Continuous Integration (Point 6)
 - [ ]  Code changes report and explanation

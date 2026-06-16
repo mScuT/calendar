@@ -114,7 +114,24 @@ All three repositories are mocked. `MeetingServiceTest` covers:
 - `loadUserByUsername_returnsUserDetailsWhenFound`- a known user becomes a `UserDetails` with the right username, password hash and `ROLE_USER`.
 - `loadUserByUsername_throwsWhenUnknown`- an unknown username throws `UsernameNotFoundException`.
 
-## 5. Remaining work (TODO)
+## 5. Integration tests with 3rd party sources (Point 2)
+
+Each provider is tested against a WireMock server that returns fixed JSON, so no real API is called. The provider is pointed at WireMock through the configurable base URL (see §3). WireMock runs on a random port, started once per test class and reset between tests.
+
+### TicketmasterProvider
+
+`TicketmasterProviderTest` covers:
+
+- `search_parsesEventsFromJson`- valid JSON becomes a `DiscoveredEvent` with id, title, description, start, url and venue.
+- `search_skipsEventsWithoutAStartDate`- "TBA" events (no start dateTime) are dropped.
+- `search_returnsEmptyOnHttpError`- an HTTP 500 gives back an empty list, not an error.
+- `search_returnsEmptyOnInvalidJson`- invalid JSON gives back an empty list.
+- `search_sendsCountryCodeAndQueryParams`- the request carries `keyword`, `apikey` and `countryCode`.
+- `search_omitsCountryCodeWhenBlank`- a blank country code leaves `countryCode` out of the request.
+- `isConfigured_reflectsApiKeyPresence`- true only when an api key is set.
+- `search_returnsEmptyAndSkipsServerWhenNotConfigured`- with no key it returns empty and makes no request.
+
+## 6. Remaining work (TODO)
 
 - [X]  Unit tests of the business logic, with mocks (Point 1)
 - [ ]  Integration tests with the 3rd party sources (Point 2)

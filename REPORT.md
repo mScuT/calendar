@@ -30,7 +30,10 @@ Test dependencies added to `pom.xml` (all `scope=test`):
 
 ## 3. SUT modifications
 
-**TODO**
+
+| # | File(s)                                                        | Change                                                                                                                          | Why                                                                                                                                                                                                          |
+| - | -------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
+| 1 | `TicketmasterProvider`, `SeatGeekProvider`, `AgendaLxProvider` | The base URL was hard-coded in each constructor; it is now a constructor parameter (`@Value` with the real URL as the default). | Testability: the integration tests with 3rd party sources will point the `RestClient` at a local WireMock server instead of the real API. Production is unchanged because the default is the real URL. |
 
 ## 4. Unit tests of the business logic (Point 1)
 
@@ -113,7 +116,7 @@ All three repositories are mocked. `MeetingServiceTest` covers:
 
 ## 5. Remaining work (TODO)
 
-- [x]  Unit tests of the business logic, with mocks (Point 1)
+- [X]  Unit tests of the business logic, with mocks (Point 1)
 - [ ]  Integration tests with the 3rd party sources (Point 2)
 - [ ]  Integration tests at the REST API level (Point 3)
 - [ ]  Integration tests with the concrete database (Point 4)

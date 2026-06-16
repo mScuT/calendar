@@ -37,9 +37,11 @@ public class AgendaLxProvider implements EventProvider {
 
     private final RestClient http;
 
-    public AgendaLxProvider() {
+    public AgendaLxProvider(
+            @org.springframework.beans.factory.annotation.Value(
+                    "${app.discover.agendalx.base-url:https://www.agendalx.pt/wp-json/agendalx/v1}") String baseUrl) {
         this.http = RestClient.builder()
-                .baseUrl("https://www.agendalx.pt/wp-json/agendalx/v1")
+                .baseUrl(baseUrl)
                 .defaultHeader("User-Agent",
                         "Mozilla/5.0 (compatible; meetings-app/0.1; +http://localhost)")
                 .build();

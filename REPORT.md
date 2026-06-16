@@ -227,13 +227,20 @@ These use `@DataJpaTest`, which loads only the JPA layer and runs against the te
 - `findByMeetingIdAndUserId_returnsTheRightParticipant`- findByMeetingIdAndUserId returns the one participant for a meeting and user (empty for a combo that does not exist).
 - `savingMeetingCascadesItsParticipants`- saving a meeting also saves its participants (cascade).
 
-## 8. Remaining work (TODO)
+## 8. End-to-end tests (Point 5)
+
+`EndToEndTest` starts the real application on a random port (`@SpringBootTest(RANDOM_PORT)`) and drives it through a real headless Chrome with Selenium. It runs on a separate in-memory database (`e2edb`) so the browser writes (which are not rolled back) do not leak into the other tests.
+
+- `user_canRegisterLogInProposeAMeetingAndSeeItOnTheCalendar`- the full flow through the browser: register an account, log in, propose a meeting, and see it appear on the calendar.
+- `twoUsers_inviteAndAccept_marksMeetingConfirmed`- alice invites bob; bob logs in, sees the pending invite and accepts it, and the meeting becomes confirmed (the PENDING -> ACCEPTED -> confirmed flow through the browser).
+
+## 9. Remaining work (TODO)
 
 - [X]  Unit tests of the business logic, with mocks (Point 1)
 - [X]  Integration tests with the 3rd party sources (Point 2)
 - [X]  Integration tests at the REST API level (Point 3)
 - [X]  Integration tests with the concrete database (Point 4)
-- [ ]  End-to-end tests with Selenium (Point 5)
+- [X]  End-to-end tests with Selenium (Point 5)
 - [ ]  Continuous Integration (Point 6)
 - [ ]  Code changes report and explanation
 - [ ]  Bug detection write-up (Assessment, point c)

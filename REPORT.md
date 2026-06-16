@@ -35,9 +35,9 @@ Integration and end-to-end tests use an in-memory H2 database, configured in `sr
 ## 3. SUT modifications
 
 
-| # | File(s)                                                        | Change                                                                                                                          | Why                                                                                                                                                                                                     |
-| - | -------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| 1 | `TicketmasterProvider`, `SeatGeekProvider`, `AgendaLxProvider` | The base URL was hard-coded in each constructor; it is now a constructor parameter (`@Value` with the real URL as the default). | Testability: the integration tests with 3rd party sources will point the `RestClient` at a local WireMock server instead of the real API. Production is unchanged because the default is the real URL. |
+| # | File(s)                                                        | Change                                                                                                                          | Why                                                                                                                                                                                                   |
+| - | -------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| 1 | `TicketmasterProvider`, `SeatGeekProvider`, `AgendaLxProvider` | The base URL was hard-coded in each constructor; it is now a constructor parameter (`@Value` with the real URL as the default). | Testability: the integration tests with 3rd party sources will point the`RestClient` at a local WireMock server instead of the real API. Production is unchanged because the default is the real URL. |
 
 ## 4. Unit tests of the business logic (Point 1)
 
@@ -234,14 +234,18 @@ These use `@DataJpaTest`, which loads only the JPA layer and runs against the te
 - `user_canRegisterLogInProposeAMeetingAndSeeItOnTheCalendar`- the full flow through the browser: register an account, log in, propose a meeting, and see it appear on the calendar.
 - `twoUsers_inviteAndAccept_marksMeetingConfirmed`- alice invites bob; bob logs in, sees the pending invite and accepts it, and the meeting becomes confirmed (the PENDING -> ACCEPTED -> confirmed flow through the browser).
 
-## 9. Remaining work (TODO)
+## 9. Continuous Integration (Point 6)
+
+`.github/workflows/ci.yml` runs the whole suite in the cloud on every push and pull request. The job runs on `ubuntu-latest`, sets up Java 17 (Temurin), and runs `mvn -B clean verify`.
+
+## 10. Remaining work (TODO)
 
 - [X]  Unit tests of the business logic, with mocks (Point 1)
 - [X]  Integration tests with the 3rd party sources (Point 2)
 - [X]  Integration tests at the REST API level (Point 3)
 - [X]  Integration tests with the concrete database (Point 4)
 - [X]  End-to-end tests with Selenium (Point 5)
-- [ ]  Continuous Integration (Point 6)
+- [X]  Continuous Integration (Point 6)
 - [ ]  Code changes report and explanation
 - [ ]  Bug detection write-up (Assessment, point c)
 - [ ]  Conclusion

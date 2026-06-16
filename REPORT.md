@@ -67,6 +67,32 @@ so the logic runs with no database and no real hashing. `UserServiceTest` covers
 - `requireByUsername_returnsUserWhenFound`- a known username resolves to its user.
 - `requireByUsername_throwsWhenUnknown`- an unknown username throws instead of returning `null`.
 
+### MeetingService
+
+All three repositories are mocked. `MeetingServiceTest` covers:
+
+**`propose(...)`**
+
+- `propose_rejectsEndNotAfterStart`- end must be strictly after start, otherwise it throws and saves nothing.
+- `propose_organizerAutoAcceptsAndInviteesArePending`- the organizer is `ACCEPTED`, each invitee starts `PENDING`.
+- `propose_deduplicatesInviteesAndSkipsOrganizerAndBlanks`- duplicate names, the organizer's own name and blank/null entries are ignored (the invitee is looked up only once).
+- `propose_throwsOnUnknownInvitee`- an unknown invitee aborts the whole proposal.
+
+**`respond(...)`**
+
+- `respond_rejectsStatusOtherThanAcceptedOrDeclined`- only `ACCEPTED`/`DECLINED` are allowed.
+- `respond_throwsWhenNoInviteExists`- responding without an existing invite throws.
+- `respond_updatesParticipantStatus`- a valid response updates the participant's status.
+
+**`copyFromDiscovered(...)`**
+
+- `copyFromDiscovered_defaultsToTwoHoursWhenNoEnd`- a missing end time defaults to a 2h duration; the user is the only `ACCEPTED` attendee.
+- `copyFromDiscovered_buildsDescriptionAndKeepsEnd`- the description embeds description/venue/source/url, and an explicit end time is preserved.
+
+**`calendarForIcalToken(...)`**
+
+- `calendarForIcalToken_throwsOnUnknownToken`- an unknown iCal token is rejected.
+
 ## 5. Remaining work (TODO)
 
 - [ ]  Unit tests of the business logic, with mocks (Point 1)

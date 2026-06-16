@@ -233,6 +233,7 @@ These use `@DataJpaTest`, which loads only the JPA layer and runs against the te
 
 - `user_canRegisterLogInProposeAMeetingAndSeeItOnTheCalendar`- the full flow through the browser: register an account, log in, propose a meeting, and see it appear on the calendar.
 - `twoUsers_inviteAndAccept_marksMeetingConfirmed`- alice invites bob; bob logs in, sees the pending invite and accepts it, and the meeting becomes confirmed (the PENDING -> ACCEPTED -> confirmed flow through the browser).
+- `proposingWithEndBeforeStart_showsErrorAndSavesNothing`- proposing with the end before the start shows the error in the UI and saves no meeting (the unhappy path through the browser).
 
 ## 9. Continuous Integration (Point 6)
 
@@ -257,6 +258,6 @@ The business logic is well covered: the services, controllers, repositories and 
 
 ## 11. Conclusion
 
-The Calendar application was tested at every level of the test pyramid: unit tests for the business logic (with Mockito), integration tests for the 3rd party providers (against a WireMock server), the REST API (MockMvc through Spring Security), and the database (`@DataJpaTest`), plus end-to-end tests with Selenium, and a CI pipeline that runs everything on each push. The result is 77 tests and about 96% line coverage of the code.
+The Calendar application was tested at every level of the test pyramid: unit tests for the business logic (with Mockito), integration tests for the 3rd party providers (against a WireMock server), the REST API (MockMvc through Spring Security), and the database (`@DataJpaTest`), plus end-to-end tests with Selenium, and a CI pipeline that runs everything on each push. The result is 78 tests and about 96% line coverage of the code.
 
 Only one change to the SUT was needed: making the providers' base URL configurable. And it does not change production behaviour.

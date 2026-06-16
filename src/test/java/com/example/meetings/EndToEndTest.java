@@ -103,6 +103,28 @@ class EndToEndTest {
         assertThat(driver.getPageSource()).contains("Portugal vs Congo").contains("confirmed");
     }
 
+    /** Proposing with the end before the start is rejected: the error is shown and nothing is saved. */
+    @Test
+    void proposingWithEndBeforeStart_showsErrorAndSavesNothing() {
+        register("alice", "alice@example.pt", "secret");
+        login("alice", "secret");
+
+        // end is before start; no client-side rule blocks this, so the server must reject it.
+        driver.get(url("/meetings/new"));
+        driver.findElement(By.id("title")).sendKeys("Portugal vs Congo");
+        setDateTimeLocal(By.id("start"), "2026-07-01T20:00");
+        setDateTimeLocal(By.id("end"), "2026-07-01T18:00");
+        driver.findElement(By.xpath("//button[normalize-space()='Propose']")).click();
+
+        // The propose page comes back with the error message...
+        wait.until(ExpectedConditions.textToBePresentInElementLocated(
+                By.tagName("body"), "End time must be after start time"));
+
+        // ...and nothing was saved to the calendar.
+        driver.get(url("/calendar"));
+        assertThat(driver.getPageSource()).contains("No meetings yet");
+    }
+
     // --- helpers ---
 
     private void register(String username, String email, String password) {

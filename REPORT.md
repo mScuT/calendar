@@ -161,7 +161,21 @@ This is the trickiest provider (JSON array, date from a list, time from free tex
 - `isConfigured_isAlwaysTrue`- this provider needs no key, so it is always configured.
 - `search_sendsSearchQuery`- the request carries the `search` query.
 
-## 6. Remaining work (TODO)
+## 6. Integration tests at the REST API level (Point 3)
+
+These boot the whole app with `@SpringBootTest` and call it through `MockMvc`, going through Spring Security, the real services and the test database. `@Transactional` rolls back what each test writes. `spring-security-test` provides the CSRF token (`csrf()`) for POSTs.
+
+### AuthController and security
+
+`AuthControllerTest` covers:
+
+- `getLogin_returnsLoginView`- GET /login is public and returns the login view.
+- `getRegister_returnsRegisterView`- GET /register is public and returns the register view.
+- `postRegister_createsUserAndRedirectsToLogin`- a valid POST /register creates the user and redirects to /login?registered.
+- `postRegister_duplicateUsername_returnsRegisterViewWithError`- a duplicate username returns the register view with an error.
+- `privateRoute_withoutLogin_redirectsToLogin`- a private route accessed without login is redirected to /login.
+
+## 7. Remaining work (TODO)
 
 - [X]  Unit tests of the business logic, with mocks (Point 1)
 - [X]  Integration tests with the 3rd party sources (Point 2)

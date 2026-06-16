@@ -144,10 +144,23 @@ Each provider is tested against a WireMock server that returns fixed JSON, so no
 - `isConfigured_reflectsClientIdPresence`- true only when a client id is set.
 - `search_returnsEmptyAndSkipsServerWhenNotConfigured`- with no client id it returns empty and makes no request.
 
+### AgendaLxProvider
+
+This is the trickiest provider (JSON array, date from a list, time from free text, HTML description, no API key). `AgendaLxProviderTest` covers:
+
+- `search_parsesEvent`- valid JSON becomes a `DiscoveredEvent`; the date comes from `occurences`, the time from text like "21h30", the description is cleaned of HTML, and the venue comes from a map.
+- `search_fallsBackTo2000WhenNoTimeIsFound`- with no readable time, the time falls back to 20:00.
+- `search_skipsEventsWithOnlyPastDates`- an event whose dates are all in the past is dropped.
+- `search_skipsEventsWithBlankTitle`- an event with a blank title is dropped.
+- `search_returnsEmptyOnHttpError`- an HTTP error gives back an empty list.
+- `search_returnsEmptyOnInvalidJson`- invalid JSON gives back an empty list.
+- `isConfigured_isAlwaysTrue`- this provider needs no key, so it is always configured.
+- `search_sendsSearchQuery`- the request carries the `search` query.
+
 ## 6. Remaining work (TODO)
 
 - [X]  Unit tests of the business logic, with mocks (Point 1)
-- [ ]  Integration tests with the 3rd party sources (Point 2)
+- [X]  Integration tests with the 3rd party sources (Point 2)
 - [ ]  Integration tests at the REST API level (Point 3)
 - [ ]  Integration tests with the concrete database (Point 4)
 - [ ]  End-to-end tests with Selenium (Point 5)

@@ -131,6 +131,19 @@ Each provider is tested against a WireMock server that returns fixed JSON, so no
 - `isConfigured_reflectsApiKeyPresence`- true only when an api key is set.
 - `search_returnsEmptyAndSkipsServerWhenNotConfigured`- with no key it returns empty and makes no request.
 
+### SeatGeekProvider
+
+`SeatGeekProviderTest` covers:
+
+- `search_parsesEventsAndReadsDatetimeAsUtc`- valid JSON becomes a `DiscoveredEvent`; `datetime_utc` has no time zone, so it is read as UTC.
+- `search_fallsBackToShortTitleWhenTitleIsMissing`- when `title` is missing, `short_title` is used.
+- `search_skipsEventsWithoutADate`- events with no `datetime_utc` are dropped.
+- `search_returnsEmptyOnHttpError`- an HTTP error gives back an empty list.
+- `search_returnsEmptyOnInvalidJson`- invalid JSON gives back an empty list.
+- `search_sendsQueryAndClientId`- the request carries `q` and `client_id`.
+- `isConfigured_reflectsClientIdPresence`- true only when a client id is set.
+- `search_returnsEmptyAndSkipsServerWhenNotConfigured`- with no client id it returns empty and makes no request.
+
 ## 6. Remaining work (TODO)
 
 - [X]  Unit tests of the business logic, with mocks (Point 1)

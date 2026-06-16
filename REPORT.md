@@ -212,6 +212,13 @@ These use `@DataJpaTest`, which loads only the JPA layer and runs against the te
 - `findByUsername_returnsUserOrEmpty`- findByUsername returns the matching user, or empty when unknown.
 - `findByIcalToken_returnsUserForTheirToken`- findByIcalToken looks a user up by their feed token.
 
+### MeetingRepository
+
+`MeetingRepositoryTest` checks the business rule inside `findCalendarMeetings`:
+
+- `findCalendarMeetings_includesOrganizedAndNonDeclined_orderedByStart`- a user's calendar holds meetings they organize or join (not declined), ordered by start time.
+- `findCalendarMeetings_keepsDeclinedMeetingOnTheOrganizerCalendar`- a meeting a user declined still stays on the organizer's calendar.
+
 ## 8. Remaining work (TODO)
 
 - [X]  Unit tests of the business logic, with mocks (Point 1)

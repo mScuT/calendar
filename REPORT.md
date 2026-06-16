@@ -28,12 +28,16 @@ Test dependencies added to `pom.xml` (all `scope=test`):
 | `wiremock-standalone`      | a fake HTTP server for testing the event providers without calling the real database |
 | `selenium-java`            | for the end-to-end tests                                                             |
 
+### Test database
+
+Integration and end-to-end tests use an in-memory H2 database, configured in `src/test/resources/application-test.properties` and turned on with `@ActiveProfiles("test")`. With `ddl-auto=create-drop` the schema is built fresh for each run, and the tests never touch the production database under `./data/`. The `MeetingsApplicationTests.contextLoads` test checks that the whole Spring context starts with this profile.
+
 ## 3. SUT modifications
 
 
-| # | File(s)                                                        | Change                                                                                                                          | Why                                                                                                                                                                                                          |
-| - | -------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
-| 1 | `TicketmasterProvider`, `SeatGeekProvider`, `AgendaLxProvider` | The base URL was hard-coded in each constructor; it is now a constructor parameter (`@Value` with the real URL as the default). | Testability: the integration tests with 3rd party sources will point the `RestClient` at a local WireMock server instead of the real API. Production is unchanged because the default is the real URL. |
+| # | File(s)                                                        | Change                                                                                                                          | Why                                                                                                                                                                                                     |
+| - | -------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| 1 | `TicketmasterProvider`, `SeatGeekProvider`, `AgendaLxProvider` | The base URL was hard-coded in each constructor; it is now a constructor parameter (`@Value` with the real URL as the default). | Testability: the integration tests with 3rd party sources will point the `RestClient` at a local WireMock server instead of the real API. Production is unchanged because the default is the real URL. |
 
 ## 4. Unit tests of the business logic (Point 1)
 

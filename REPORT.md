@@ -104,6 +104,13 @@ All three repositories are mocked. `MeetingServiceTest` covers:
 - `search_dedupesBySourceAndIdWhenUrlIsNull`- with a null URL, dedup falls back to source + externalId.
 - `search_sortsResultsByStartTime`- the merged list is sorted by start time.
 
+### AppUserDetailsService
+
+`AppUserDetailsService` is the class Spring Security calls at login to load a user; `UserRepository` is mocked. `AppUserDetailsServiceTest` covers:
+
+- `loadUserByUsername_returnsUserDetailsWhenFound`- a known user becomes a `UserDetails` with the right username, password hash and `ROLE_USER`.
+- `loadUserByUsername_throwsWhenUnknown`- an unknown username throws `UsernameNotFoundException`.
+
 ## 5. Remaining work (TODO)
 
 - [x]  Unit tests of the business logic, with mocks (Point 1)

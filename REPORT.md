@@ -186,11 +186,25 @@ These boot the whole app with `@SpringBootTest` and call it through `MockMvc`, g
 - `postMeetingsNew_endBeforeStart_returnsProposeViewWithError`- end before start shows the form again with an error and saves nothing.
 - `postRespond_accept_marksInviteAccepted`- an invitee accepting their invite updates the participant status.
 
+### DiscoveryController
+
+`DiscoveryControllerTest` mocks `DiscoveryService` (so no real API is called). It covers:
+
+- `getDiscover_withQuery_putsResultsInModel`- a query puts the search results in the model.
+- `postDiscoverCopy_addsEventToCalendar`- copying a discovered event adds it to the user's calendar.
+
+### ICalController
+
+`ICalControllerTest` covers:
+
+- `getIcalFeed_validToken_returnsCalendar`- a valid token returns a `text/calendar` VCALENDAR feed.
+- `getIcalFeed_unknownToken_returns404`- an unknown token returns 404.
+
 ## 7. Remaining work (TODO)
 
 - [X]  Unit tests of the business logic, with mocks (Point 1)
 - [X]  Integration tests with the 3rd party sources (Point 2)
-- [ ]  Integration tests at the REST API level (Point 3)
+- [X]  Integration tests at the REST API level (Point 3)
 - [ ]  Integration tests with the concrete database (Point 4)
 - [ ]  End-to-end tests with Selenium (Point 5)
 - [ ]  Continuous Integration (Point 6)
